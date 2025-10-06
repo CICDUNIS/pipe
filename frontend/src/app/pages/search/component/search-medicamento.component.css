@@ -1,0 +1,142 @@
+.search-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.search-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.search-description {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.search-form {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.results-container {
+    margin-top: 2rem;
+}
+
+.results-container h3 {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.medicamento-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.medicamento-table th,
+.medicamento-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+.medicamento-table th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+}
+
+.medicamento-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.medicamento-table tr:hover {
+    background-color: #e2e2e2;
+    transition: background-color 0.3s ease;
+}
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row:hover {
+    background-color: #e2e2e2;
+    transition: background-color 0.3s ease;
+}
+
+.medicamento-imagen {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.image-cell {
+    width: 80px;
+    text-align: center;
+}
+
+.precio-cell {
+    font-weight: 600;
+    color: #0d6efd;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        border: 0;
+    }
+
+    .medicamento-table thead {
+        display: none;
+    }
+
+    .medicamento-table tr {
+        margin-bottom: 1rem;
+        display: block;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+    }
+
+    .medicamento-table td {
+        display: block;
+        text-align: right;
+        padding: 0.75rem;
+        position: relative;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .medicamento-table td:last-child {
+        border-bottom: 0;
+    }
+
+    .medicamento-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0.75rem;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .image-cell {
+        width: 100%;
+        text-align: center;
+    }
+
+    .medicamento-imagen {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+
+

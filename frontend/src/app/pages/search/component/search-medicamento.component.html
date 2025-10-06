@@ -1,0 +1,67 @@
+<div class="search-container">
+    <div class="search-header">
+        <h2>Búsqueda de Medicamentos</h2>
+        <p class="search-description">Busque medicamentos por nombre, principio activo o marca</p>
+    </div>
+
+    <div class="search-form">
+        <div class="input-group mb-3">
+            <input 
+                type="text" 
+                class="form-control" 
+                [(ngModel)]="term" 
+                placeholder="Ingrese término de búsqueda..." 
+                (keyup.enter)="onSearch()"
+            />
+            <button class="btn btn-primary" type="button" (click)="onSearch()">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+    </div>
+
+    <div class="loading-container" *ngIf="(loading$ | async)">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Buscando...</span>
+        </div>
+        <span class="ms-2">Buscando medicamentos...</span>
+    </div>
+
+    <div class="alert alert-info" *ngIf="term === '' && !(resultados$ | async)?.length">
+        <i class="bi bi-info-circle"></i> Ingrese un término de búsqueda para encontrar medicamentos.
+    </div>
+
+    <div class="results-container" *ngIf="(resultados$ | async)?.length">
+        <h3>Resultados de la búsqueda</h3>
+        <div class="table-responsive">
+            <table class="table table-hover medicamento-table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Marca</th>
+                        <th>Principio Activo</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let med of (resultados$ | async)" [routerLink]="['/medicamento', med.idMedicamento]" class="clickable-row">
+                        <td class="image-cell">
+                            <img [src]="med.fotoUrl || 'assets/images/no-image.jpg'" alt="{{ med.nombre }}" class="medicamento-imagen"/>
+                        </td>
+                        <td>{{ med.nombre }}</td>
+                        <td>{{ med.marca }}</td>
+                        <td>{{ med.principioActivo }}</td>
+                        <td class="precio-cell">${{ med.precio | number:'1.2-2' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="alert alert-warning" *ngIf="term !== '' && !(loading$ | async) && !(resultados$ | async)?.length">
+        <i class="bi bi-exclamation-triangle"></i> No se encontraron resultados para "<strong>{{ term }}</strong>". Intente con otro término de búsqueda.
+    </div>
+</div>
+
+
+

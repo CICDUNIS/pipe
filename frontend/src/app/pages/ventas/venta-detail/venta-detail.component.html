@@ -1,0 +1,18 @@
+<div *ngIf="(venta$ | async) as v">
+  <p>ID Venta: {{ v.idVenta }}</p>
+  <p>ID Usuario: {{ v.idUsuario }}</p>
+  <p>Total: {{ v.total }}</p>
+
+  <h3>Detalles:</h3>
+  <ul>
+    <li *ngFor="let d of v.detalles">
+      ID Medicamento: {{ d.idMedicamento }},
+      Cantidad: {{ d.cantidad }},
+      Precio: {{ d.precioUnitario }},
+      Subtotal: {{ d.totalLinea }}
+    </li>
+  </ul>
+</div>
+
+
+

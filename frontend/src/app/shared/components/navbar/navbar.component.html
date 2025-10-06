@@ -1,0 +1,178 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">
+      <i class="bi bi-plus-circle-fill"></i>
+      Farmacias DB2ADFS
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarContent"
+      aria-controls="navbarContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <i class="bi bi-house"></i> Inicio
+          </a>
+        </li>
+
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a
+            class="nav-link"
+            routerLink="/pages/medicamentos"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-capsule"></i> Medicamentos
+          </a>
+        </li>
+
+        <li
+          class="nav-item"
+          *ngIf="isLoggedIn() && (isFarmaceutico() || isAdmin())"
+        >
+          <a
+            class="nav-link"
+            routerLink="/pages/ventas"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-cart"></i> Ventas
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/search" routerLinkActive="active">
+            <i class="bi bi-search"></i> Búsqueda
+          </a>
+        </li>
+
+        <li class="nav-item dropdown" *ngIf="isAdmin()">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="adminDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-shield-lock"></i> Administración
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/admin/user-management"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-people"></i> Gestión de Usuarios
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/admin/reports"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-bar-chart"></i> Reportes
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/admin/settings"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-gear"></i> Configuración
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ms-auto">
+        <ng-container *ngIf="!isLoggedIn()">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/auth/login"
+              routerLinkActive="active"
+            >
+              <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/auth/register"
+              routerLinkActive="active"
+            >
+              <i class="bi bi-person-plus"></i> Registrarse
+            </a>
+          </li>
+        </ng-container>
+
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <app-cart-widget></app-cart-widget>
+        </li>
+
+        <li class="nav-item dropdown" *ngIf="isLoggedIn()">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="userDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-circle"></i> Mi Cuenta
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end profile-dropdown"
+            aria-labelledby="userDropdown"
+          >
+            <div class="profile-header">
+              <div class="profile-image">
+                <i class="bi bi-person"></i>
+              </div>
+              <div class="profile-name">{{ getUserName() }}</div>
+              <div class="profile-role">{{ getUserRole() }}</div>
+            </div>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/pages/profile"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-person-badge"></i> Mi Perfil
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a
+                class="dropdown-item"
+                (click)="logout()"
+                style="cursor: pointer"
+              >
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

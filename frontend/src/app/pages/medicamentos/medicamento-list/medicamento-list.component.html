@@ -1,0 +1,121 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">Catálogo de Medicamentos</h2>
+      <button [routerLink]="['/pages/medicamentos/create']" class="btn btn-light">
+        <i class="bi bi-plus-circle"></i> Nuevo Medicamento
+      </button>
+    </div>
+
+    <div class="card-body">
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar medicamentos..."
+              [(ngModel)]="searchTerm"
+              (keyup.enter)="onSearch()">
+            <button class="btn btn-outline-secondary" type="button" (click)="onSearch()">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" [(ngModel)]="categoryFilter" (change)="applyFilters()">
+            <option value="">Todas las categorías</option>
+            <option *ngFor="let category of uniqueCategories" [value]="category">{{ category }}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" [(ngModel)]="prescriptionFilter" (change)="applyFilters()">
+            <option value="">Todos los medicamentos</option>
+            <option value="true">Requiere receta</option>
+            <option value="false">Venta libre</option>
+          </select>
+        </div>
+      </div>
+
+      <div *ngIf="(loading$ | async)" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando medicamentos...</p>
+      </div>
+
+      <div *ngIf="(error$ | async) as error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <div *ngIf="!(loading$ | async) && filteredMedicamentos.length === 0" class="alert alert-info">
+        No se encontraron medicamentos que coincidan con los criterios de búsqueda.
+      </div>
+
+      <div class="table-responsive" *ngIf="!(loading$ | async) && filteredMedicamentos.length > 0">
+        <table class="table table-striped table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Principio Activo</th>
+              <th>Presentación</th>
+              <th>Marca</th>
+              <th>Receta</th>
+              <th>Stock</th>
+              <th>Precio</th>
+              <th>Acciones</th>
+              <th *ngIf="isAuthenticated">Carrito</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let med of filteredMedicamentos">
+              <td>{{ med.codigo }}</td>
+              <td>{{ med.nombre }}</td>
+              <td>{{ med.categoria }}</td>
+              <td>{{ med.principioActivo }}</td>
+              <td>{{ med.presentacion }} ({{ med.concentracion }})</td>
+              <td>{{ med.marca }}</td>
+              <td>
+                <span *ngIf="med.requiereReceta === true || med.requiereReceta === 'Y'" class="badge bg-warning text-dark">Receta</span>
+                <span *ngIf="med.requiereReceta === false || med.requiereReceta === 'N'" class="badge bg-success">Libre</span>
+              </td>
+              <td>
+                <span [ngClass]="{'text-danger': med.stock < 10, 'text-warning': med.stock >= 10 && med.stock < 30, 'text-success': med.stock >= 30}">
+                  {{ med.stock }}
+                </span>
+              </td>
+              <td>${{ med.precio | number:'1.2-2' }}</td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-primary" (click)="goEdit(med.idMedicamento!)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="onDelete(med.idMedicamento!)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+              <td *ngIf="isAuthenticated">
+                <app-add-to-cart
+                  [medicamentoId]="med.idMedicamento!"
+                  [requiereReceta]="med.requiereReceta === true || med.requiereReceta === 'Y'"
+                  [inStock]="med.stock > 0"
+                  [stock]="med.stock"
+                  [showQuantity]="false"
+                  buttonSize="sm"
+                  buttonText="Agregar"
+                  buttonClass="btn-outline-primary">
+                </app-add-to-cart>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

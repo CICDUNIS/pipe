@@ -1,0 +1,42 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card text-center shadow">
+        <div class="card-body py-5">
+          <div class="mb-4">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+          </div>
+          <h1 class="display-4 mb-4">¡Compra Exitosa!</h1>
+          <p class="lead mb-1">Tu pedido de medicamentos ha sido procesado correctamente.</p>
+          <p class="mb-4">Recibirás una confirmación con los detalles de tu compra.</p>
+          
+          <div class="order-details p-3 my-4 mx-auto rounded bg-light" style="max-width: 400px;">
+            <div class="row g-3">
+              <div class="col-6 text-start">
+                <strong>Número de Orden:</strong>
+              </div>
+              <div class="col-6 text-end">
+                {{ orderNumber }}
+              </div>
+              <div class="col-6 text-start">
+                <strong>Fecha:</strong>
+              </div>
+              <div class="col-6 text-end">
+                {{ currentDate | date:'dd/MM/yyyy' }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-4">
+            <button routerLink="/pages/medicamentos" class="btn btn-primary me-2">
+              <i class="bi bi-basket me-2"></i>Seguir Comprando
+            </button>
+            <button routerLink="/" class="btn btn-outline-secondary">
+              <i class="bi bi-house me-2"></i>Ir al Inicio
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,84 @@
+.home-container {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.home-title {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}
+
+.loading {
+    font-size: 1.2em;
+    color: #999;
+}
+
+.medicamento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.medicamento-card {
+    width: 100%;
+    max-width: 280px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    padding: 15px;
+}
+
+.medicamento-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.medicamento-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.medicamento-imagen {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.medicamento-nombre {
+    font-size: 1.2em;
+    color: #333;
+    font-weight: 600;
+    margin: 5px 0;
+}
+
+.medicamento-principio {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.medicamento-marca {
+    font-size: 0.9em;
+    color: #888;
+}
+
+.medicamento-precio {
+    font-size: 1.3em;
+    color: #2E8B57;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+

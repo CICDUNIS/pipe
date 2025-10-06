@@ -1,0 +1,134 @@
+.badge {
+  font-size: 0.65em;
+  transform: translate(-50%, -50%) !important;
+}
+
+i.bi-cart3 {
+  font-size: 1.2rem;
+}
+
+.cart-icon {
+  font-size: 1.2rem;
+  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.nav-link:hover .cart-icon {
+  color: #0d6efd;
+  transform: scale(1.1);
+}
+
+.badge-shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}
+
+.cart-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  width: 320px;
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.cart-container {
+  position: relative;
+}
+
+.cart-container:hover .cart-dropdown,
+.cart-dropdown:hover {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.cart-item-details {
+  flex-grow: 1;
+}
+
+.cart-item-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.cart-item-price {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.cart-footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-total {
+  font-weight: 600;
+}
+
+.cart-checkout-btn {
+  transition: all 0.2s ease;
+}
+
+.cart-checkout-btn:hover {
+  transform: translateY(-2px);
+}
+
+.empty-cart-message {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: #6c757d;
+}
+
+.cart-item-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  transition: all 0.3s ease;
+}
+
+.cart-badge {
+  min-width: 20px;
+  height: 20px;
+  line-height: 1;
+  padding: 0 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} 

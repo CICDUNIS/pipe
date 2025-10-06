@@ -1,0 +1,8 @@
+.card {
+  border-radius: 1rem;
+  border: none;
+}
+
+.order-details {
+  border: 1px dashed #ced4da;
+} 

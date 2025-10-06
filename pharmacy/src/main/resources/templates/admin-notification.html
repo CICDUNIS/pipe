@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Usuario Registrado - Sistema de Farmacia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        .user-info {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .user-info p {
+            margin: 5px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Sistema de Farmacia</h1>
+        <h2>Notificación de Administrador</h2>
+    </div>
+    <div class="content">
+        <p>Hola Administrador,</p>
+        
+        <p>Un nuevo usuario se ha registrado en el Sistema de Farmacia. A continuación se detallan los datos del usuario:</p>
+        
+        <div class="user-info">
+            <p><strong>Nombre:</strong> <span th:text="${userName}">Nombre Usuario</span></p>
+            <p><strong>Correo electrónico:</strong> <span th:text="${userEmail}">correo@ejemplo.com</span></p>
+            <p><strong>Fecha de registro:</strong> <span th:text="${registrationDate}">01/01/2023</span></p>
+        </div>
+        
+        <p>Este usuario ha confirmado su correo electrónico y está esperando la activación de su cuenta y asignación de rol.</p>
+        
+        <p>Por favor, revisa y activa esta cuenta si es apropiado.</p>
+        
+        <div style="text-align: center;">
+            <a th:href="${adminUrl}" class="button">Gestionar Usuarios</a>
+        </div>
+        
+        <p>Saludos,<br>Sistema de Farmacia</p>
+    </div>
+    <div class="footer">
+        <p>Este es un mensaje automático. Por favor, no responda a este correo.</p>
+        <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2023</span> Sistema de Farmacia. Todos los derechos reservados.</p>
+    </div>
+</body>
+</html> 

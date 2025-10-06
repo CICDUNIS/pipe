@@ -1,0 +1,157 @@
+<div class="medication-detail-container">
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando información del medicamento...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <div class="error-message">
+      <i class="fas fa-exclamation-circle"></i>
+      <p>{{ error }}</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/">Volver al inicio</button>
+  </div>
+
+  <div *ngIf="!loading && !error && medicamento" class="medication-content">
+    <div class="medication-header">
+      <div class="medication-image">
+        <img [src]="medicamento.fotoUrl || 'assets/images/no-image.png'" [alt]="medicamento.nombre" />
+      </div>
+      <div class="medication-info">
+        <h1>{{ medicamento.nombre }}</h1>
+        <div class="medication-meta">
+          <span class="medication-brand">{{ medicamento.marca }}</span>
+          <span class="medication-category">{{ medicamento.categoria }}</span>
+          <span *ngIf="medicamento.requiereReceta" class="medication-prescription">Requiere receta médica</span>
+        </div>
+        <div class="medication-price">
+          <span class="price-label">Precio:</span>
+          <span class="price-value">${{ medicamento.precio.toFixed(2) }}</span>
+        </div>
+        <div class="medication-stock">
+          <span class="stock-label">Disponibilidad:</span>
+          <span class="stock-value" [ngClass]="{'in-stock': medicamento.stock > 0, 'out-of-stock': medicamento.stock <= 0}">
+            {{ medicamento.stock > 0 ? 'En stock (' + medicamento.stock + ' unidades)' : 'Agotado' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="medication-details">
+      <div class="details-section">
+        <h2>Detalles del producto</h2>
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Código:</span>
+            <span class="detail-value">{{ medicamento.codigo }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Principio activo:</span>
+            <span class="detail-value">{{ medicamento.principioActivo }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Concentración:</span>
+            <span class="detail-value">{{ medicamento.concentracion }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Presentación:</span>
+            <span class="detail-value">{{ medicamento.presentacion }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Unidades por presentación:</span>
+            <span class="detail-value">{{ medicamento.numeroUnidades }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="description-section">
+        <h2>Descripción</h2>
+        <p>{{ medicamento.descripcion }}</p>
+      </div>
+    </div>
+
+    <div class="comments-section">
+      <h2>Comentarios</h2>
+
+      <div class="new-comment-form">
+        <h3>Deja tu comentario</h3>
+        <div *ngIf="isAuthenticated(); else loginPrompt">
+          <textarea
+            [(ngModel)]="newComment"
+            placeholder="Escribe tu comentario aquí..."
+            rows="3"
+          ></textarea>
+          <button
+            class="btn btn-primary"
+            [disabled]="!newComment.trim()"
+            (click)="submitComment()"
+          >
+            Publicar comentario
+          </button>
+        </div>
+        <ng-template #loginPrompt>
+          <div class="login-prompt">
+            <p>Debes iniciar sesión para dejar un comentario.</p>
+            <button class="btn btn-primary" [routerLink]="['/auth/login']" [queryParams]="{returnUrl: router.url}">
+              Iniciar sesión
+            </button>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="comments-list">
+        <div *ngIf="comentarios.length === 0" class="no-comments">
+          <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+        </div>
+
+        <div *ngFor="let comentario of comentarios" class="comment-thread">
+          <div class="comment">
+            <div class="comment-header">
+              <span class="comment-author">{{ comentario.nombreUsuario || 'Usuario' }}</span>
+              <span class="comment-date">{{ formatDate(comentario.fecha) }}</span>
+            </div>
+            <div class="comment-body">
+              <p>{{ comentario.texto }}</p>
+            </div>
+            <div class="comment-actions">
+              <button class="btn-link" (click)="startReply(comentario.idComentario!)">Responder</button>
+            </div>
+
+            <div *ngIf="replyingTo === comentario.idComentario" class="reply-form">
+              <textarea
+                [(ngModel)]="replyText"
+                placeholder="Escribe tu respuesta..."
+                rows="2"
+              ></textarea>
+              <div class="reply-actions">
+                <button class="btn btn-secondary" (click)="cancelReply()">Cancelar</button>
+                <button
+                  class="btn btn-primary"
+                  [disabled]="!replyText.trim()"
+                  (click)="submitReply(comentario.idComentario!)"
+                >
+                  Responder
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="comentario.respuestas && comentario.respuestas.length > 0" class="replies">
+            <div *ngFor="let respuesta of comentario.respuestas" class="comment reply">
+              <div class="comment-header">
+                <span class="comment-author">{{ respuesta.nombreUsuario || 'Usuario' }}</span>
+                <span class="comment-date">{{ formatDate(respuesta.fecha) }}</span>
+              </div>
+              <div class="comment-body">
+                <p>{{ respuesta.texto }}</p>
+              </div>
+              <div class="comment-actions">
+                <button class="btn-link" (click)="startReply(comentario.idComentario!)">Responder</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Activación de Cuenta - Sistema de Farmacia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        .role-badge {
+            display: inline-block;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .feature {
+            background-color: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            margin: 15px 0;
+            padding: 10px 15px;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Sistema de Farmacia</h1>
+        <h2>Cuenta Activada</h2>
+    </div>
+    <div class="content">
+        <p>Hola <span th:text="${name}">Usuario</span>,</p>
+        
+        <p>Nos complace informarte que tu cuenta en el Sistema de Farmacia ha sido activada exitosamente con el rol de:</p>
+        
+        <div style="text-align: center;">
+            <div class="role-badge" th:text="${role}">Rol de Usuario</div>
+        </div>
+        
+        <p>Ahora puedes iniciar sesión y acceder a todas las funcionalidades disponibles para tu rol.</p>
+        
+        <h3>¿Qué puedes hacer ahora?</h3>
+        
+        <div class="feature">
+            <strong>Acceder a tu cuenta:</strong> Inicia sesión con tu correo y contraseña.
+        </div>
+        
+        <div class="feature">
+            <strong>Completar tu perfil:</strong> Al iniciar sesión por primera vez, se te pedirá que completes tu información personal.
+        </div>
+        
+        <div class="feature">
+            <strong>Explorar funcionalidades:</strong> Descubre todas las características disponibles para tu rol.
+        </div>
+        
+        <p>Puedes iniciar sesión haciendo clic en el botón que aparece a continuación:</p>
+        
+        <div style="text-align: center;">
+            <a th:href="${loginUrl}" class="button">Iniciar Sesión</a>
+        </div>
+        
+        <p>Gracias por formar parte de nuestro sistema.</p>
+        
+        <p>Saludos,<br>El Equipo de Sistema de Farmacia</p>
+    </div>
+    <div class="footer">
+        <p>Este es un mensaje automático. Por favor, no responda a este correo.</p>
+        <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2023</span> Sistema de Farmacia. Todos los derechos reservados.</p>
+    </div>
+</body>
+</html> 

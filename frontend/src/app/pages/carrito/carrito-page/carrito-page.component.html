@@ -1,0 +1,130 @@
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0">Mi Carrito de Compras</h2>
+    </div>
+
+    <div *ngIf="loading$ | async" class="card-body text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-3">Cargando tu carrito...</p>
+    </div>
+
+    <div *ngIf="error$ | async as error" class="card-body">
+      <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ error }}
+      </div>
+    </div>
+
+    <div
+      *ngIf="
+        (!(cart$ | async)?.items?.length ||
+          (cart$ | async)?.items?.length === 0) &&
+        !(loading$ | async)
+      "
+      class="card-body text-center p-5"
+    >
+      <div class="empty-cart-container">
+        <i class="bi bi-cart-x empty-cart-icon"></i>
+        <h3 class="mt-3">Tu carrito está vacío</h3>
+        <p class="text-muted">Agrega medicamentos para comenzar.</p>
+        <button class="btn btn-primary btn-lg" routerLink="/pages/medicamentos">
+          <i class="bi bi-basket me-2"></i>Ir a Medicamentos
+        </button>
+      </div>
+    </div>
+
+    <ng-container *ngIf="cart$ | async as cart">
+      <div
+        *ngIf="
+          cart && cart.items && cart.items.length > 0 && !(loading$ | async)
+        "
+        class="card-body"
+      >
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="table-light">
+              <tr>
+                <th>Producto</th>
+                <th class="text-center">Precio Unitario</th>
+                <th class="text-center">Cantidad</th>
+                <th class="text-end">Subtotal</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of cart.items">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                      <h5 class="mb-0">{{ item.nombreMedicamento }}</h5>
+                      <small
+                        *ngIf="item.requiereReceta === 'N'"
+                        class="badge bg-success"
+                        >Venta Libre</small
+                      >
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">
+                  {{ item.precioUnitario | currency: "USD" }}
+                </td>
+                <td class="text-center">
+                  <div
+                    class="quantity-control d-flex justify-content-center align-items-center"
+                  >
+                    <button
+                      class="btn btn-sm btn-outline-secondary"
+                      [disabled]="item.cantidad <= 1"
+                      (click)="updateQuantity(item, item.cantidad - 1)"
+                    >
+                      <i class="bi bi-dash"></i>
+                    </button>
+                    <span class="mx-2">{{ item.cantidad }}</span>
+                    <button
+                      class="btn btn-sm btn-outline-secondary"
+                      (click)="updateQuantity(item, item.cantidad + 1)"
+                    >
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </div>
+                </td>
+                <td class="text-end">{{ item.total | currency: "USD" }}</td>
+                <td class="text-center">
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="removeItem(item)"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="fw-bold">
+                <td colspan="3" class="text-end">Total:</td>
+                <td class="text-end">{{ cart.total | currency: "USD" }}</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button class="btn btn-outline-secondary" (click)="clearCart()">
+            <i class="bi bi-trash me-2"></i>Vaciar Carrito
+          </button>
+          <button
+            class="btn btn-success btn-lg"
+            (click)="checkout()"
+            [disabled]="loading$ | async"
+          >
+            <i class="bi bi-check2-circle me-2"></i>Finalizar Compra
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

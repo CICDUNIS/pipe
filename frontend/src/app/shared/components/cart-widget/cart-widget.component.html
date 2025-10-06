@@ -1,0 +1,74 @@
+<div class="cart-container">
+  <a
+    routerLink="/pages/carrito"
+    class="nav-link position-relative"
+    title="Ver carrito"
+  >
+    <i class="bi bi-cart3 cart-icon"></i>
+    <ng-container *ngIf="cartItemCount$ | async as count">
+      <span
+        *ngIf="count > 0"
+        #badgeElement
+        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge"
+      >
+        {{ count }}
+        <span class="visually-hidden">items en el carrito</span>
+      </span>
+    </ng-container>
+  </a>
+
+  <div class="cart-dropdown">
+    <ng-container *ngIf="cartItems$ | async as items">
+      <div *ngIf="items.length === 0" class="empty-cart-message">
+        <i class="bi bi-cart-x mb-2" style="font-size: 1.5rem"></i>
+        <p>Tu carrito está vacío</p>
+      </div>
+
+      <div *ngIf="items.length > 0">
+        <h6 class="mb-3">Carrito de Compras</h6>
+
+        <div class="cart-items-container">
+          <div *ngFor="let item of items.slice(0, 3)" class="cart-item">
+            <img
+              [src]="'assets/placeholder-med.png'"
+              [alt]="item.nombreMedicamento"
+              class="cart-item-img"
+            />
+            <div class="cart-item-details">
+              <div class="cart-item-name">{{ item.nombreMedicamento }}</div>
+              <div class="cart-item-price">
+                {{ item.cantidad }} x
+                {{ item.precioUnitario | currency: "USD" }}
+              </div>
+            </div>
+            <button
+              class="btn btn-sm text-danger"
+              (click)="removeItem(item.idMedicamento)"
+              title="Quitar"
+            >
+              <i class="bi bi-x"></i>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="items.length > 3" class="text-center my-2">
+          <small class="text-muted"
+            >y {{ items.length - 3 }} productos más...</small
+          >
+        </div>
+
+        <div class="cart-footer">
+          <div class="cart-total">
+            Total: {{ cartTotal$ | async | currency: "USD" }}
+          </div>
+          <a
+            routerLink="/pages/carrito"
+            class="btn btn-primary btn-sm cart-checkout-btn"
+          >
+            Ver Carrito
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

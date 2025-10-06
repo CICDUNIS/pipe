@@ -1,0 +1,35 @@
+<div>
+  <h2>Listado de Ventas</h2>
+
+  <div *ngIf="(loading$ | async)">Cargando ventas...</div>
+  <div *ngIf="(error$ | async) as err" style="color:red">
+    Error: {{err.message || err}}
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID Venta</th>
+        <th>ID Usuario</th>
+        <th>Fecha Venta</th>
+        <th>Total</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let v of (ventas$ | async)">
+        <td>{{ v.idVenta }}</td>
+        <td>{{ v.idUsuario }}</td>
+        <td>{{ v.fechaVenta }}</td>
+        <td>{{ v.total }}</td>
+        <td>
+          <button class="btn btn-info btn-sm" (click)="goDetail(v.idVenta)">Ver Detalle</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+

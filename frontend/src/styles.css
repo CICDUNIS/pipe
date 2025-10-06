@@ -1,0 +1,25 @@
+/* Import Bootstrap Icons */
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+body {
+/*  background-color: #121212; */
+  background-color: white;
+}
+
+h2 {
+  color: black;
+}
+
+label {
+  color: black;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* transitions */
+.nav-link, .dropdown-item {
+  transition: all 0.2s ease-in-out;
+}
+

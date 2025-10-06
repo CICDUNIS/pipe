@@ -1,0 +1,283 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h2>{{ isEdit ? "Editar" : "Crear" }} Medicamento</h2>
+    </div>
+    <div class="card-body">
+      <div *ngIf="loading" class="text-center my-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando información del medicamento...</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger mb-4">
+        {{ errorMessage }}
+        <div class="mt-2" *ngIf="errorMessage?.includes('sesión')">
+          <button class="btn btn-outline-danger" [routerLink]="['/login']">
+            Iniciar sesión nuevamente
+          </button>
+        </div>
+      </div>
+
+      <form
+        [formGroup]="medicamentoForm"
+        (ngSubmit)="onSubmit()"
+        *ngIf="!loading"
+      >
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="codigo" class="form-label">Código *</label>
+              <input
+                type="text"
+                id="codigo"
+                formControlName="codigo"
+                class="form-control"
+                placeholder="Código único del medicamento"
+              />
+              <div
+                *ngIf="
+                  medicamentoForm.get('codigo')?.invalid &&
+                  medicamentoForm.get('codigo')?.touched
+                "
+                class="text-danger"
+              >
+                Código es requerido
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre *</label>
+              <input
+                type="text"
+                id="nombre"
+                formControlName="nombre"
+                class="form-control"
+                placeholder="Nombre del medicamento"
+              />
+              <div
+                *ngIf="
+                  medicamentoForm.get('nombre')?.invalid &&
+                  medicamentoForm.get('nombre')?.touched
+                "
+                class="text-danger"
+              >
+                Nombre es requerido
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="categoria" class="form-label">Categoría *</label>
+              <input
+                type="text"
+                id="categoria"
+                formControlName="categoria"
+                class="form-control"
+                placeholder="Ej: Cardiología, Presión arterial"
+              />
+              <div
+                *ngIf="
+                  medicamentoForm.get('categoria')?.invalid &&
+                  medicamentoForm.get('categoria')?.touched
+                "
+                class="text-danger"
+              >
+                Categoría es requerida
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="principioActivo" class="form-label"
+                >Principio Activo *</label
+              >
+              <input
+                type="text"
+                id="principioActivo"
+                formControlName="principioActivo"
+                class="form-control"
+                placeholder="Principio activo del medicamento"
+              />
+              <div
+                *ngIf="
+                  medicamentoForm.get('principioActivo')?.invalid &&
+                  medicamentoForm.get('principioActivo')?.touched
+                "
+                class="text-danger"
+              >
+                Principio activo es requerido
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <textarea
+                id="descripcion"
+                formControlName="descripcion"
+                class="form-control"
+                rows="3"
+                placeholder="Descripción breve del medicamento"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="concentracion" class="form-label"
+                >Concentración *</label
+              >
+              <input
+                type="text"
+                id="concentracion"
+                formControlName="concentracion"
+                class="form-control"
+                placeholder="Ej: 500mg, 10ml"
+              />
+              <div
+                *ngIf="
+                  medicamentoForm.get('concentracion')?.invalid &&
+                  medicamentoForm.get('concentracion')?.touched
+                "
+                class="text-danger"
+              >
+                Concentración es requerida
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="presentacion" class="form-label"
+                >Presentación *</label
+              >
+              <input
+                type="text"
+                id="presentacion"
+                formControlName="presentacion"
+                class="form-control"
+                placeholder="Ej: Caja, Blister, Paquete"
+              />
+              <div
+                *ngIf="
+                  medicamentoForm.get('presentacion')?.invalid &&
+                  medicamentoForm.get('presentacion')?.touched
+                "
+                class="text-danger"
+              >
+                Presentación es requerida
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="numeroUnidades" class="form-label"
+                >Número de Unidades *</label
+              >
+              <input
+                type="number"
+                id="numeroUnidades"
+                formControlName="numeroUnidades"
+                class="form-control"
+                min="1"
+              />
+              <div
+                *ngIf="
+                  medicamentoForm.get('numeroUnidades')?.invalid &&
+                  medicamentoForm.get('numeroUnidades')?.touched
+                "
+                class="text-danger"
+              >
+                Número de unidades es requerido
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="marca" class="form-label">Marca *</label>
+              <input
+                type="text"
+                id="marca"
+                formControlName="marca"
+                class="form-control"
+                placeholder="Marca del medicamento"
+              />
+              <div
+                *ngIf="
+                  medicamentoForm.get('marca')?.invalid &&
+                  medicamentoForm.get('marca')?.touched
+                "
+                class="text-danger"
+              >
+                Marca es requerida
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="fotoUrl" class="form-label">URL de la Foto</label>
+              <input
+                type="text"
+                id="fotoUrl"
+                formControlName="fotoUrl"
+                class="form-control"
+                placeholder="URL de la imagen del medicamento"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col-md-4">
+            <div class="mb-3 form-check">
+              <input
+                type="checkbox"
+                id="requiereReceta"
+                formControlName="requiereReceta"
+                class="form-check-input"
+              />
+              <label for="requiereReceta" class="form-check-label"
+                >Requiere Receta Médica</label
+              >
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label for="stock" class="form-label">Stock *</label>
+              <input
+                type="number"
+                id="stock"
+                formControlName="stock"
+                class="form-control"
+                min="0"
+              />
+              <div
+                *ngIf="
+                  medicamentoForm.get('stock')?.invalid &&
+                  medicamentoForm.get('stock')?.touched
+                "
+                class="text-danger"
+              >
+                Stock es requerido y debe ser mayor o igual a 0
+              </div>
+            </div>
+          </div>
+
+          </div>
+       
+
+        <div class="d-flex justify-content-between mt-4">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            [routerLink]="['/pages/medicamentos']"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="medicamentoForm.invalid"
+          >
+            {{ isEdit ? "Actualizar" : "Crear" }} Medicamento
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

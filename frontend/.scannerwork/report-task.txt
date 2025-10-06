@@ -1,0 +1,6 @@
+projectKey=angular-pharmacy
+serverUrl=http://localhost:9000
+serverVersion=25.8.0.112029
+dashboardUrl=http://localhost:9000/dashboard?id=angular-pharmacy
+ceTaskId=887289e7-9c96-4be9-90f5-c150e68e322f
+ceTaskUrl=http://localhost:9000/api/ce/task?id=887289e7-9c96-4be9-90f5-c150e68e322f

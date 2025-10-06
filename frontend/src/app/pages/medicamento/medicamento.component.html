@@ -1,0 +1,298 @@
+<div class="medicamento-detail-container">
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando información del medicamento...</p>
+  </div>
+
+  <div *ngIf="error" class="error-alert">
+    <p>{{ error }}</p>
+    <button (click)="loadMedicamento()">Reintentar</button>
+  </div>
+
+  <div *ngIf="medicamento && !isLoading" class="medicamento-info">
+    <div class="medicamento-header">
+      <div class="medicamento-image">
+        <img [src]="medicamento.imagenUrl" [alt]="medicamento.nombre" />
+      </div>
+      <div class="medicamento-header-info">
+        <h1>{{ medicamento.nombre }}</h1>
+        <p class="principio-activo">{{ medicamento.principioActivo }}</p>
+        <p class="marca">{{ medicamento.marca }}</p>
+        <p class="precio">Q{{ medicamento.precio.toFixed(2) }}</p>
+
+        <div class="mt-3">
+          <app-add-to-cart
+            [medicamentoId]="medicamento.idMedicamento"
+            [requiereReceta]="medicamento.requiereReceta"
+            [inStock]="medicamento.stock !== undefined && medicamento.stock > 0"
+            [stock]="medicamento.stock !== undefined ? medicamento.stock : 0"
+            buttonClass="btn-success"
+            buttonSize="btn-lg"
+          >
+          </app-add-to-cart>
+        </div>
+
+        <p
+          class="mt-2 stock-info"
+          [ngClass]="{
+            'text-success':
+              medicamento.stock !== undefined && medicamento.stock > 10,
+            'text-warning':
+              medicamento.stock !== undefined &&
+              medicamento.stock > 0 &&
+              medicamento.stock <= 10,
+            'text-danger':
+              medicamento.stock !== undefined && medicamento.stock === 0,
+          }"
+        >
+          <i
+            class="bi"
+            [ngClass]="{
+              'bi-check-circle-fill':
+                medicamento.stock !== undefined && medicamento.stock > 10,
+              'bi-exclamation-circle-fill':
+                medicamento.stock !== undefined &&
+                medicamento.stock > 0 &&
+                medicamento.stock <= 10,
+              'bi-x-circle-fill':
+                medicamento.stock !== undefined && medicamento.stock === 0,
+            }"
+          ></i>
+          <span
+            *ngIf="medicamento.stock !== undefined && medicamento.stock > 10"
+            >En stock ({{ medicamento.stock }} disponibles)</span
+          >
+          <span
+            *ngIf="
+              medicamento.stock !== undefined &&
+              medicamento.stock > 0 &&
+              medicamento.stock <= 10
+            "
+            >¡Quedan pocas unidades! ({{ medicamento.stock }} disponibles)</span
+          >
+          <span
+            *ngIf="medicamento.stock !== undefined && medicamento.stock === 0"
+            >Agotado</span
+          >
+        </p>
+
+        <div class="mt-3" *ngIf="!isAuthenticated">
+          <div class="alert alert-info">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            <a
+              routerLink="/auth/login"
+              [queryParams]="{ returnUrl: '/medicamento/' + idMedicamento }"
+              >Inicia sesión</a
+            >
+            para comprar este producto.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="medicamento-descripcion">
+      <h2>Descripción</h2>
+      <p>{{ medicamento.descripcion }}</p>
+    </div>
+
+    <div class="medicamento-laboratorio">
+      <h2>Laboratorio</h2>
+      <p>{{ medicamento.laboratorio }}</p>
+    </div>
+
+    <div class="comentarios-section">
+      <h2>Comentarios</h2>
+
+      <div *ngIf="isAuthenticated" class="comentario-form">
+        <h3>Agregar un comentario</h3>
+        <form [formGroup]="comentarioForm" (ngSubmit)="agregarComentario()">
+          <div class="form-group">
+            <textarea
+              formControlName="texto"
+              placeholder="Escribe tu comentario aquí..."
+              rows="3"
+            ></textarea>
+            <div
+              *ngIf="
+                comentarioForm.get('texto')?.invalid &&
+                comentarioForm.get('texto')?.touched
+              "
+              class="error-message"
+            >
+              El comentario debe tener al menos 3 caracteres.
+            </div>
+          </div>
+          <button type="submit" [disabled]="comentarioForm.invalid">
+            Publicar comentario
+          </button>
+        </form>
+      </div>
+
+      <div *ngIf="!isAuthenticated" class="login-prompt">
+        <p>
+          Debes
+          <a
+            routerLink="/auth/login"
+            [queryParams]="{ returnUrl: '/pages/medicamento/' + idMedicamento }"
+            >iniciar sesión</a
+          >
+          para comentar.
+        </p>
+      </div>
+
+      <div class="comentarios-list" disabled>
+        <div
+          *ngIf="comentarios.length > 0"
+          class="debug-info"
+          style="display: none"
+        >
+          <p>Total root comments: {{ comentarios.length }}</p>
+          <div *ngFor="let comment of comentarios">
+            <p>
+              Root ID {{ comment.idComentario }} has
+              {{ comment.respuestas?.length || 0 }} direct replies
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="comentarios.length === 0" class="no-comentarios">
+          <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+        </div>
+
+        <ng-container *ngFor="let comentario of comentarios">
+          <ng-container
+            *ngTemplateOutlet="
+              comentarioTemplate;
+              context: { $implicit: comentario, level: 0 }
+            "
+          >
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #comentarioTemplate let-comentario let-level="level">
+  <div
+    class="comentario-item"
+    [attr.data-comment-id]="comentario.idComentario"
+    [style.margin-left.px]="level * 20"
+  >
+    <div class="comentario-header">
+      <span class="comentario-autor">{{
+        comentario.nombreUsuario || "Usuario"
+      }}</span>
+      <span class="comentario-fecha">{{
+        comentario.fecha | date: "dd/MM/yyyy HH:mm"
+      }}</span>
+      <span class="comentario-nivel" style="color: #666"
+        >(Nivel {{ level }})</span
+      >
+    </div>
+    <div class="comentario-texto">
+      <p>{{ comentario.texto }}</p>
+    </div>
+    <div class="comentario-actions">
+      <button
+        *ngIf="isAuthenticated"
+        (click)="mostrarResponder(comentario.idComentario!)"
+      >
+        Responder
+      </button>
+      <button
+        *ngIf="puedeEditar(comentario.idUsuario)"
+        (click)="eliminarComentario(comentario.idComentario!)"
+      >
+        Eliminar
+      </button>
+    </div>
+
+    <div
+      *ngIf="mostrarFormRespuesta === comentario.idComentario"
+      class="respuesta-form"
+    >
+      <form
+        [formGroup]="respuestaForm"
+        (ngSubmit)="agregarRespuesta(comentario.idComentario!)"
+      >
+        <div class="form-group">
+          <textarea
+            formControlName="texto"
+            placeholder="Escribe tu respuesta aquí..."
+            rows="2"
+          ></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" [disabled]="respuestaForm.invalid">
+            Responder
+          </button>
+          <button type="button" (click)="ocultarResponder()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <div
+      *ngIf="comentario.respuestas && comentario.respuestas.length > 0"
+      class="respuestas-list"
+    >
+      <ng-container *ngFor="let respuesta of comentario.respuestas">
+        <ng-container
+          *ngTemplateOutlet="
+            comentarioTemplate;
+            context: { $implicit: respuesta, level: level + 1 }
+          "
+        >
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<div class="row mb-4" *ngIf="medicamento">
+  <div class="col-md-8">
+    <h1 class="mb-3">{{ medicamento.nombre }}</h1>
+    <p class="text-muted">
+      <strong>Principio Activo:</strong> {{ medicamento.principioActivo }}
+    </p>
+    <p class="text-muted"><strong>Marca:</strong> {{ medicamento.marca }}</p>
+    <p class="h4 mb-3">
+      <strong>Precio:</strong> ${{ medicamento.precio | number: "1.2-2" }}
+    </p>
+    <p>{{ medicamento.descripcion }}</p>
+    <p class="text-muted">
+      <strong>Laboratorio:</strong> {{ medicamento.laboratorio }}
+    </p>
+  </div>
+  <div class="col-md-4">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Disponibilidad</h5>
+        <p
+          [ngClass]="{
+            'text-success': medicamento.stock > 10,
+            'text-warning': medicamento.stock > 0 && medicamento.stock <= 10,
+            'text-danger': medicamento.stock === 0,
+          }"
+        >
+          <strong>Stock:</strong>
+          <span *ngIf="medicamento.stock > 0"
+            >{{ medicamento.stock }} unidades</span
+          >
+          <span *ngIf="medicamento.stock === 0">Agotado</span>
+        </p>
+
+        <app-add-to-cart
+          [medicamentoId]="medicamento.idMedicamento"
+          [requiereReceta]="medicamento.requiereReceta"
+          [inStock]="medicamento.stock > 0"
+          [stock]="medicamento.stock"
+          buttonClass="btn-primary w-100"
+          buttonText="Agregar al Carrito"
+          buttonSize="btn-lg"
+        >
+        </app-add-to-cart>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="add-to-cart-container">
+  <div *ngIf="error" class="alert alert-danger error-message">
+    {{ error }}
+    <div *ngIf="authError" class="mt-2">
+      <a [routerLink]="['/auth/login']" class="btn btn-sm btn-outline-primary"
+        >Iniciar sesión</a
+      >
+    </div>
+  </div>
+
+  <div *ngIf="success" class="alert alert-success success-message">
+    Producto agregado al carrito
+  </div>
+
+  <div *ngIf="showQuantity && isAuthenticated" class="quantity-selector mb-2">
+    <button
+      (click)="decrementQuantity()"
+      class="btn btn-outline-secondary"
+      [disabled]="cantidad <= 1 || loading"
+      aria-label="Decrementar cantidad"
+    >
+      -
+    </button>
+    <input
+      type="number"
+      [(ngModel)]="cantidad"
+      min="1"
+      [max]="stock"
+      class="form-control text-center"
+      [disabled]="loading"
+      aria-label="Cantidad"
+    />
+    <button
+      (click)="incrementQuantity()"
+      class="btn btn-outline-secondary"
+      [disabled]="cantidad >= stock || loading"
+      aria-label="Incrementar cantidad"
+    >
+      +
+    </button>
+  </div>
+
+  <button
+    *ngIf="isAuthenticated"
+    (click)="addToCart()"
+    class="btn {{ buttonClass }} {{ buttonSize }}"
+    [disabled]="
+      loading || !inStock || requiereReceta === 'Y' || requiereReceta === true
+    "
+  >
+    <span
+      *ngIf="loading"
+      class="spinner-border spinner-border-sm me-1"
+      role="status"
+      aria-hidden="true"
+    ></span>
+    {{ buttonText }}
+  </button>
+
+  <button
+    *ngIf="!isAuthenticated"
+    [routerLink]="['/auth/login']"
+    class="btn {{ buttonClass }} {{ buttonSize }}"
+  >
+    Iniciar sesión para comprar
+  </button>
+
+  <div
+    *ngIf="requiereReceta === 'Y' || requiereReceta === true"
+    class="prescription-required mt-2"
+  >
+    <small class="text-warning">Este medicamento requiere receta médica</small>
+  </div>
+
+  <div *ngIf="!inStock" class="out-of-stock mt-2">
+    <small class="text-danger">Producto fuera de stock</small>
+  </div>
+</div>

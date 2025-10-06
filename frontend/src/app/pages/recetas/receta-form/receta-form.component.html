@@ -1,0 +1,28 @@
+<div>
+  <h2>{{ editingId ? 'Editar' : 'Crear' }} Receta</h2>
+
+  <form [formGroup]="recetaForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label>Código Receta</label>
+      <input type="text" class="form-control" formControlName="codigoReceta" />
+    </div>
+    <div class="mb-3">
+      <label>Fecha</label>
+      <input type="text" class="form-control" formControlName="fecha" />
+    </div>
+    <div class="mb-3">
+      <label>Aprobado Seguro</label>
+      <input type="checkbox" formControlName="aprobadoSeguro" />
+    </div>
+    <div class="mb-3">
+      <label>PDF URL</label>
+      <input type="text" class="form-control" formControlName="pdfUrl" />
+    </div>
+
+    <button type="submit" class="btn btn-success">
+      {{ editingId ? 'Actualizar' : 'Crear' }}
+    </button>
+  </form>
+</div>
+
+

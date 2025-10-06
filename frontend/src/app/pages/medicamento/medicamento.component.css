@@ -1,0 +1,356 @@
+.medicamento-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-alert {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-alert button {
+  background-color: #c62828;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.medicamento-header {
+  display: flex;
+  margin-bottom: 30px;
+  gap: 30px;
+}
+
+.medicamento-image {
+  flex: 0 0 300px;
+}
+
+.medicamento-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.medicamento-header-info {
+  flex: 1;
+}
+
+.medicamento-header-info h1 {
+  margin-top: 0;
+  color: #333;
+  font-size: 2rem;
+}
+
+.principio-activo {
+  color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.marca {
+  color: #888;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.precio {
+  font-size: 1.8rem;
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.medicamento-descripcion, .medicamento-laboratorio {
+  margin-bottom: 30px;
+}
+
+.medicamento-descripcion h2, .medicamento-laboratorio h2, .comentarios-section h2 {
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.comentarios-section {
+  margin-top: 40px;
+}
+
+.comentario-form {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.comentario-form h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.error-message {
+  color: #c62828;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #1565c0;
+}
+
+button:disabled {
+  background-color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.login-prompt {
+  background-color: #e8f5e9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.login-prompt a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-prompt a:hover {
+  text-decoration: underline;
+}
+
+.comentarios-list {
+  margin-top: 20px;
+}
+
+.no-comentarios {
+  text-align: center;
+  color: #888;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.comentario-item {
+  border-left: 2px solid #e0e0e0;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.comentario-item:hover {
+  border-left-color: #007bff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.comentario-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.9em;
+}
+
+.comentario-autor {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.comentario-fecha {
+  color: #666;
+}
+
+.comentario-nivel {
+  margin-left: auto;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  font-size: 0.8em;
+}
+
+.comentario-texto {
+  margin-bottom: 10px;
+}
+
+.comentario-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.comentario-actions button {
+  padding: 4px 8px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comentario-actions button:first-child {
+  background-color: #e7f3ff;
+  color: #0056b3;
+}
+
+.comentario-actions button:last-child {
+  background-color: #ffe7e7;
+  color: #dc3545;
+}
+
+.respuesta-form {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.respuesta-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.form-actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-actions button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+
+.form-actions button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.form-actions button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+}
+
+.respuestas-list {
+  position: relative;
+}
+
+.respuestas-list::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #e0e0e0;
+}
+
+.debug-info {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.debug-info p {
+  margin: 5px 0;
+}
+
+.test-login {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.test-login button {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.test-login button:hover {
+  background-color: #e0a800;
+}
+
+@media (max-width: 768px) {
+  .medicamento-header {
+    flex-direction: column;
+  }
+
+  .medicamento-image {
+    flex: 0 0 auto;
+    margin-bottom: 20px;
+  }
+}

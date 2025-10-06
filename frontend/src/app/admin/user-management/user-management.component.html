@@ -1,0 +1,118 @@
+<div class="user-management-container">
+  <h2>Gestión de Usuarios</h2>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div class="filter-section">
+    <h3>Filtros</h3>
+    <div class="filter-form">
+      <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input id="email" type="text" [(ngModel)]="filters.email" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="fromDate">Fecha Desde</label>
+        <input id="fromDate" type="date" [(ngModel)]="filters.fromDate" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="toDate">Fecha Hasta</label>
+        <input id="toDate" type="date" [(ngModel)]="filters.toDate" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="role">Rol</label>
+        <select id="role" [(ngModel)]="filters.role" class="form-control">
+          <option value="">Todos los roles</option>
+          <option *ngFor="let role of roles" [value]="role.nombreRol">{{ role.nombreRol }}</option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button (click)="applyFilters()" class="btn btn-primary">Aplicar Filtros</button>
+        <button (click)="resetFilters()" class="btn btn-secondary">Reiniciar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="users-table-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Cargando usuarios...</p>
+    </div>
+
+    <table *ngIf="!isLoading" class="users-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Fecha Creación</th>
+          <th>Roles</th>
+          <th>Estado</th>
+          <th>Perfil Completo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users" [class.selected]="selectedUser?.id === user.id">
+          <td>{{ user.id }}</td>
+          <td>{{ user.nombre }}</td>
+          <td>{{ user.correo }}</td>
+          <td>{{ user.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <span *ngIf="user.roles.length === 0">No asignado</span>
+            <div *ngFor="let role of user.roles" class="role-badge">
+              {{ role }}
+              <button *ngIf="user.activo === 'Y'" class="remove-role-btn" (click)="removeRole(user, getRoleIdByName(role))">&times;</button>
+            </div>
+          </td>
+          <td [class.active]="user.activo === 'Y'" [class.inactive]="user.activo === 'N'">
+            {{ user.activo === 'Y' ? 'Activo' : 'Inactivo' }}
+          </td>
+          <td>
+            <span *ngIf="user.perfilCompleto">Completo</span>
+            <span *ngIf="!user.perfilCompleto">Incompleto</span>
+          </td>
+          <td class="actions">
+            <button *ngIf="user.activo === 'N'" class="btn btn-sm btn-success" (click)="selectUser(user)">Activar</button>
+            <button *ngIf="user.activo === 'Y'" class="btn btn-sm btn-danger" (click)="deactivateUser(user)">Desactivar</button>
+            <button class="btn btn-sm btn-primary" (click)="selectUser(user)">Asignar Rol</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!isLoading && users.length === 0" class="no-results">
+      No se encontraron usuarios que coincidan con los criterios de búsqueda.
+    </div>
+  </div>
+
+  <div *ngIf="selectedUser" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>{{ selectedUser.activo === 'Y' ? 'Asignar Rol' : 'Activar Usuario' }}</h3>
+        <button class="close-btn" (click)="selectedUser = null">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p>Usuario: <strong>{{ selectedUser.nombre }}</strong> ({{ selectedUser.correo }})</p>
+
+        <div class="form-group">
+          <label for="selectedRole">Seleccione un rol:</label>
+          <select id="selectedRole" [(ngModel)]="selectedRoleId" class="form-control" required>
+            <option [ngValue]="null">Seleccione un rol</option>
+            <option *ngFor="let role of roles" [ngValue]="role.idRol">{{ role.nombreRol }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="selectedUser = null">Cancelar</button>
+        <button *ngIf="selectedUser.activo === 'N'" class="btn btn-success" (click)="activateUser(selectedUser)">Activar Usuario</button>
+        <button *ngIf="selectedUser.activo === 'Y'" class="btn btn-primary" (click)="assignRole(selectedUser)">Asignar Rol</button>
+      </div>
+    </div>
+  </div>
+</div>

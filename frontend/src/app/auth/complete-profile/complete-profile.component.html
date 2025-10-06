@@ -1,0 +1,26 @@
+<div class="complete-profile-container">
+  <h2>Complete su Perfil</h2>
+  <p *ngIf="isPrimerLogin" class="first-login-message">
+    Bienvenido a Farmacia. Como es su primer ingreso, por favor complete su información personal.
+  </p>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="nombre">Nombre Completo</label>
+      <input id="nombre" type="text" [(ngModel)]="userData.nombre" name="nombre" class="form-control" required>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Guardar Perfil
+      </button>
+    </div>
+  </form>
+
+  <div class="skip-link">
+    <a routerLink="/pages/medicamentos">Volver sin guardar</a>
+  </div>
+</div>
