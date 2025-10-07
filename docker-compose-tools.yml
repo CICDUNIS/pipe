@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: jenkins
+    ports:
+      - "8090:8080" 
+      - "50000:50000" 
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock 
+    networks:
+      - cicd-net
+
+  sonarqube:
+    image: sonarqube:lts-community
+    container_name: sonarqube_pipe
+    ports:
+      - "9000:9000" 
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - cicd-net
+
+  oracle-db-dev:
+    image: gvenzl/oracle-free:latest
+    container_name: oracle-db-dev
+    ports:
+      - "1523:1521" 
+    environment:
+      - ORACLE_PASSWORD=devpass
+    volumes:
+      - oracle_data_dev:/opt/oracle/oradata
+      - ./db-scripts:/docker-entrypoint-initdb.d 
+    networks:
+      - cicd-net
+
+  oracle-db-uat:
+    image: gvenzl/oracle-free:latest
+    container_name: oracle-db-uat
+    ports:
+      - "1524:1521" 
+    environment:
+      - ORACLE_PASSWORD=uatpass
+    volumes:
+      - oracle_data_uat:/opt/oracle/oradata
+      - ./db-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - cicd-net
+
+  oracle-db-prod:
+    image: gvenzl/oracle-free:latest
+    container_name: oracle-db-prod
+    ports:
+      - "1525:1521" 
+    environment:
+      - ORACLE_PASSWORD=prodpass
+    volumes:
+      - oracle_data_prod:/opt/oracle/oradata
+      - ./db-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - cicd-net
+
+volumes:
+  jenkins_home:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  oracle_data_dev:
+  oracle_data_uat:
+  oracle_data_prod:
+
+networks:
+  cicd-net:
+    driver: bridge

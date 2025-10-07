@@ -1,16 +1,17 @@
-FROM node:18 AS build
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the source code and build for production
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine
+FROM nginx:1.25-alpine
 
-COPY --from=build /app/dist/<your-angular-project-name> /usr/share/nginx/html
+COPY --from=builder /app/dist/frontend/browser /usr/share/nginx/html
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
