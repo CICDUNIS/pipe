@@ -129,17 +129,15 @@ pipeline {
     }
 
     post {
-        failure {
-            mail(
-                to: 'JAFY.FergusonY@gmail.com, jflores@unis.edu.gt', 
-                subject: "Build FAILED: ${currentBuild.fullDisplayName}",
-                body: "The build for ${env.JOB_NAME} failed. Check the logs here: ${env.BUILD_URL}",
-                from: 'nightowlgt@yahoo.com',
-                smtpHost: 'smtp.mail.yahoo.com',
-                smtpPort: '587',
-                smtpAuth: true,
-                credentialsId: 'yahoo-mail-cred'
-            )
-        }
+	    failure {
+		    emailext(
+				    to: 'JAFY.FergusonY@gmail.com, jflores@unis.edu.gt', 
+				    subject: "Build FAILED: ${currentBuild.fullDisplayName}",
+				    body: """<p>The build for ${env.JOB_NAME} failed.</p>
+				    <p>Console output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>""",
+				    from: 'nightowlgt@yahoo.com',
+				    mimeType: 'text/html'
+			    )
+	    }
     }
 }
