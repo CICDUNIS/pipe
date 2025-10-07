@@ -8,7 +8,7 @@ pipeline {
     }
 
     environment {
-        SONAR_HOST_URL          = 'http://sonarqube_pipe:9000'
+        SONAR_HOST_URL          = 'http://sonarqube:9000'
         SONAR_TOKEN             = credentials('sonarqube-token')
         
         BACKEND_IMAGE_NAME      = "local/pharmacy-app:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
@@ -33,7 +33,7 @@ pipeline {
 						waitUntil {
 							script {
 								try {
-									sh(script: "curl -s -f http://sonarqube_pipe:9000/api/system/health", returnStatus: true) == 0
+									sh(script: "curl -s -f http://sonarqube:9000/api/system/health", returnStatus: true) == 0
 								} catch (Exception e) {
 									return false
 								}
