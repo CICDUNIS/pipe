@@ -29,7 +29,7 @@ pipeline {
 		steps {
 			script {
 				echo "Waiting for SonarQube server to be available..."
-					timeout(time: 90, unit: 'SECONDS') {
+					timeout(time: 180, unit: 'SECONDS') {
 						waitUntil {
 							script {
 								try {
