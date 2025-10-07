@@ -26,29 +26,29 @@ pipeline {
         }
 
 	stage('Backend Test & Analyze') {
-		steps {
-			script {
-				echo "Waiting for SonarQube server to be available..."
-					timeout(time: 180, unit: 'SECONDS') {
-						waitUntil {
-							script {
-								try {
-									sh(script: "curl -s -f http://sonarqube:9000/api/system/health", returnStatus: true) == 0
-								} catch (Exception e) {
-									return false
-								}
-							}
-						}
-					}
-				echo "SonarQube server is up!"
-			}
-			dir('pharmacy') {
-				withSonarQubeEnv('SonarQube') {
-					sh 'mvn clean verify sonar:sonar -Dsonar.login=$SONAR_TOKEN'
-				}
-			}
-		}
-	}
+    steps {
+        script {
+            echo "Waiting for SonarQube server to be operational..."
+            timeout(time: 180, unit: 'SECONDS') {
+                waitUntil {
+                    script {
+                        try {
+                            sh(script: "curl -s http://sonarqube:9000/api/system/status | grep '\"status\":\"UP\"'", returnStatus: true) == 0
+                        } catch (Exception e) {
+                            return false
+                        }
+                    }
+                }
+            }
+            echo "SonarQube server is up!"
+        }
+        dir('pharmacy') {
+            withSonarQubeEnv('SonarQube') {
+                sh 'mvn clean verify sonar:sonar -Dsonar.login=$SONAR_TOKEN'
+            }
+        }
+    }
+}
 
         stage('SonarQube Quality Gate') {
             steps {
