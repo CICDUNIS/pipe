@@ -22,6 +22,13 @@ services:
     image: docker:dind
     container_name: docker-dind
     privileged: true
+    ports: 
+      - "8081:8081" 
+      - "4301:4301" 
+      - "8082:8082" 
+      - "4302:4302" 
+      - "8083:8083" 
+      - "4303:4303" 
     volumes:
       - docker_data:/var/lib/docker
     networks:
