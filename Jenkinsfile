@@ -61,73 +61,56 @@ pipeline {
 		}
 
 		stage('Build Docker Images') {
-			steps {
-				script {
-					echo "Waiting for Docker daemon to be available..."
-						timeout(time: 60, unit: 'SECONDS') {
-							waitUntil {
-								sh(script: "docker info", returnStatus: true) == 0
-							}
-						}
-					echo "Docker daemon is up!"
-				}
-
-				dir('pharmacy') {
-					sh "docker build -t ${env.BACKEND_IMAGE_NAME} ."
-				}
-
-				dir('frontend') {
-					sh "docker build -t ${env.FRONTEND_IMAGE_NAME} ."
-				}
-			}
-		}
+            steps {
+                dir('pharmacy') {
+                    sh "docker build -t ${env.BACKEND_IMAGE_NAME} ."
+                }
+                dir('frontend') {
+                    sh "docker build -t ${env.FRONTEND_IMAGE_NAME} ."
+                }
+            }
+        }
 
 		stage('Deploy to Dev') {
-			when { branch 'dev' }
-			steps {
-				script {
-					echo "Deploying to DEV environment..."
-						sh "docker stop ${env.BACKEND_CONTAINER_NAME} || true"
-						sh "docker rm ${env.BACKEND_CONTAINER_NAME} || true"
-						sh "docker stop ${env.FRONTEND_CONTAINER_NAME} || true"
-						sh "docker rm ${env.FRONTEND_CONTAINER_NAME} || true"
-
-						sh """
-						docker run -d --rm --name ${env.BACKEND_CONTAINER_NAME} -p 8081:8080 \\
-						-e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@host.docker.internal:1523/XEPDB1 \\
-						-e SPRING_DATASOURCE_USERNAME=PHARMACY_LOCAL \\
-						-e SPRING_DATASOURCE_PASSWORD=devpass \\
-						${env.BACKEND_IMAGE_NAME}
-					"""
-
-						sh "docker run -d --rm --name ${env.FRONTEND_CONTAINER_NAME} -p 4301:80 ${env.FRONTEND_IMAGE_NAME}"
-
-						echo "Deployed to DEV. Backend: http://localhost:8081 | Frontend: http://localhost:4301"
-				}
-			}
-		}
+            when { branch 'dev' }
+            steps {
+                script {
+                    echo "Deploying to DEV environment..."
+                    sh "docker stop ${env.BACKEND_CONTAINER_NAME} || true"
+                    sh "docker rm ${env.BACKEND_CONTAINER_NAME} || true"
+                    sh "docker stop ${env.FRONTEND_CONTAINER_NAME} || true"
+                    sh "docker rm ${env.FRONTEND_CONTAINER_NAME} || true"
+                    sh """
+                    docker run -d --rm --name ${env.BACKEND_CONTAINER_NAME} -p 8081:8080 --network=pipe_cicd-net \\
+                        -e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db-dev:1521/XEPDB1 \\
+                        -e SPRING_DATASOURCE_USERNAME=PHARMACY_LOCAL \\
+                        -e SPRING_DATASOURCE_PASSWORD=devpass \\
+                        ${env.BACKEND_IMAGE_NAME}
+                    """
+                    sh "docker run -d --rm --name ${env.FRONTEND_CONTAINER_NAME} -p 4301:80 --network=pipe_cicd-net ${env.FRONTEND_IMAGE_NAME}"
+                    echo "Deployed to DEV. Backend: http://localhost:8081 | Frontend: http://localhost:4301"
+                }
+            }
+        }
 
 		stage('Deploy to UAT') {
 			when { branch 'uat' }
 			steps {
 				script {
 					echo "Deploying to UAT environment..."
-						sh "docker stop ${env.BACKEND_CONTAINER_NAME} || true"
-						sh "docker rm ${env.BACKEND_CONTAINER_NAME} || true"
-						sh "docker stop ${env.FRONTEND_CONTAINER_NAME} || true"
-						sh "docker rm ${env.FRONTEND_CONTAINER_NAME} || true"
-
-						sh """
-						docker run -d --rm --name ${env.BACKEND_CONTAINER_NAME} -p 8082:8080 \\
-						-e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@host.docker.internal:1524/XEPDB1 \\
+					sh "docker stop ${env.BACKEND_CONTAINER_NAME} || true"
+					sh "docker rm ${env.BACKEND_CONTAINER_NAME} || true"
+					sh "docker stop ${env.FRONTEND_CONTAINER_NAME} || true"
+					sh "docker rm ${env.FRONTEND_CONTAINER_NAME} || true"
+					sh """
+					docker run -d --rm --name ${env.BACKEND_CONTAINER_NAME} -p 8082:8080 --network=pipe_cicd-net \\
+						-e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db-uat:1521/XEPDB1 \\
 						-e SPRING_DATASOURCE_USERNAME=PHARMACY_LOCAL \\
 						-e SPRING_DATASOURCE_PASSWORD=uatpass \\
 						${env.BACKEND_IMAGE_NAME}
 					"""
-
-						sh "docker run -d --rm --name ${env.FRONTEND_CONTAINER_NAME} -p 4302:80 ${env.FRONTEND_IMAGE_NAME}"
-
-						echo "Deployed to UAT. Backend: http://localhost:8082 | Frontend: http://localhost:4302"
+					sh "docker run -d --rm --name ${env.FRONTEND_CONTAINER_NAME} -p 4302:80 --network=pipe_cicd-net ${env.FRONTEND_IMAGE_NAME}"
+					echo "Deployed to UAT. Backend: http://localhost:8082 | Frontend: http://localhost:4302"
 				}
 			}
 		}
@@ -137,22 +120,19 @@ pipeline {
 			steps {
 				script {
 					echo "Deploying to PRODUCTION environment..."
-						sh "docker stop ${env.BACKEND_CONTAINER_NAME} || true"
-						sh "docker rm ${env.BACKEND_CONTAINER_NAME} || true"
-						sh "docker stop ${env.FRONTEND_CONTAINER_NAME} || true"
-						sh "docker rm ${env.FRONTEND_CONTAINER_NAME} || true"
-
-						sh """
-						docker run -d --rm --name ${env.BACKEND_CONTAINER_NAME} -p 8083:8080 \\
-						-e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@host.docker.internal:1525/XEPDB1 \\
+					sh "docker stop ${env.BACKEND_CONTAINER_NAME} || true"
+					sh "docker rm ${env.BACKEND_CONTAINER_NAME} || true"
+					sh "docker stop ${env.FRONTEND_CONTAINER_NAME} || true"
+					sh "docker rm ${env.FRONTEND_CONTAINER_NAME} || true"
+					sh """
+					docker run -d --rm --name ${env.BACKEND_CONTAINER_NAME} -p 8083:8080 --network=pipe_cicd-net \\
+						-e SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db-prod:1521/XEPDB1 \\
 						-e SPRING_DATASOURCE_USERNAME=PHARMACY_LOCAL \\
 						-e SPRING_DATASOURCE_PASSWORD=prodpass \\
 						${env.BACKEND_IMAGE_NAME}
 					"""
-
-						sh "docker run -d --rm --name ${env.FRONTEND_CONTAINER_NAME} -p 4303:80 ${env.FRONTEND_IMAGE_NAME}"
-
-						echo "Deployed to PRODUCTION. Backend: http://localhost:8083 | Frontend: http://localhost:4303"
+					sh "docker run -d --rm --name ${env.FRONTEND_CONTAINER_NAME} -p 4303:80 --network=pipe_cicd-net ${env.FRONTEND_IMAGE_NAME}"
+					echo "Deployed to PRODUCTION. Backend: http://localhost:8083 | Frontend: http://localhost:4303"
 				}
 			}
 		}

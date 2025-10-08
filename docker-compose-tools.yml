@@ -1,34 +1,24 @@
 services:
   jenkins:
-    build: ./jenkins
+    image: jenkins/docker
     container_name: jenkins
+    privileged: true
+    user: jenkins
     ports:
       - "8090:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - cicd-net
-    environment:
-      - DOCKER_HOST=tcp://docker-dind:2375 
     depends_on:
-      - sonarqube 
-      - docker-dind
+      - sonarqube
       - oracle-db-dev
       - oracle-db-uat
       - oracle-db-prod
 
-  docker-dind:
-    image: docker:dind
-    container_name: docker-dind
-    privileged: true
-    volumes:
-      - docker_data:/var/lib/docker
-    networks:
-      - cicd-net
-    command: ["dockerd", "--host=tcp://0.0.0.0:2375", "--tls=false"]
-
-  sonarqube: 
+  sonarqube:
     image: sonarqube:lts-community
     container_name: sonarqube_pipe
     ports:
@@ -83,7 +73,6 @@ services:
 
 volumes:
   jenkins_home:
-  docker_data:
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
