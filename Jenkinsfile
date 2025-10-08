@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     tools {
-        jdk 'JDK 17'
-        maven 'Maven 3.9'
-        nodejs 'NodeJS 20'
-    }
+    jdk 'JDK 17'
+    maven 'Maven 3.9'
+    nodejs 'NodeJS 20'
+    docker 'docker' 
+}
 
     environment {
         SONAR_HOST_URL          = 'http://sonarqube:9000'
