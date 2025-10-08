@@ -13,8 +13,8 @@ pipeline {
 		SONAR_HOST_URL          = 'http://sonarqube:9000'
 			SONAR_TOKEN             = credentials('sonarqube-token')
 
-			BACKEND_IMAGE_NAME      = "local/pharmacy-app:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
-			FRONTEND_IMAGE_NAME     = "local/frontend-app:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+			BACKEND_IMAGE_NAME      = "local/pharmacy-app:${env.BRANCH_NAME.replaceAll('/', '-')}-${env.BUILD_NUMBER}"
+                        FRONTEND_IMAGE_NAME     = "local/frontend-app:${env.BRANCH_NAME.replaceAll('/', '-')}-${env.BUILD_NUMBER}"
 
 			BACKEND_CONTAINER_NAME  = "pharmacy-backend-${env.BRANCH_NAME}"
 			FRONTEND_CONTAINER_NAME = "pharmacy-frontend-${env.BRANCH_NAME}"
