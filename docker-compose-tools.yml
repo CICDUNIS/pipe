@@ -1,7 +1,6 @@
 services:
   jenkins:
-    group_add:
-      - "1"
+    user: root
     image: jenkins/jenkins:lts-jdk17
     container_name: jenkins
     ports:
