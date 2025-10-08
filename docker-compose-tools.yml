@@ -1,6 +1,6 @@
 services:
   jenkins:
-    image: jenkins/docker
+    image: jenkins/docker:lts
     container_name: jenkins
     privileged: true
     user: jenkins
