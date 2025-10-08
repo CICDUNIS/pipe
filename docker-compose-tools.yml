@@ -7,14 +7,25 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - cicd-net
+    environment:
+      - DOCKER_HOST=tcp://docker-dind:2375 
     depends_on:
       - sonarqube 
+      - docker-dind
       - oracle-db-dev
       - oracle-db-uat
       - oracle-db-prod
+
+  docker-dind:
+    image: docker:dind
+    container_name: docker-dind
+    privileged: true
+    volumes:
+      - docker_data:/var/lib/docker
+    networks:
+      - cicd-net
 
   sonarqube: 
     image: sonarqube:lts-community
@@ -71,6 +82,7 @@ services:
 
 volumes:
   jenkins_home:
+  docker_data:
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
