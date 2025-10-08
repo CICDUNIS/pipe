@@ -26,6 +26,7 @@ services:
       - docker_data:/var/lib/docker
     networks:
       - cicd-net
+    command: ["dockerd", "--host=tcp://0.0.0.0:2375", "--tls=false"]
 
   sonarqube: 
     image: sonarqube:lts-community
