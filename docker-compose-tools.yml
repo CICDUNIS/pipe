@@ -1,9 +1,7 @@
 services:
   jenkins:
-    image: jenkins/docker:lts
+    build: ./jenkins
     container_name: jenkins
-    privileged: true
-    user: jenkins
     ports:
       - "8090:8080"
       - "50000:50000"
