@@ -1,7 +1,6 @@
 services:
   jenkins:
-    user: root
-    image: jenkins/jenkins:lts-jdk17
+    build: ./jenkins
     container_name: jenkins
     ports:
       - "8090:8080"
