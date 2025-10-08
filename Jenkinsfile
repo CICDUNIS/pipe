@@ -5,7 +5,7 @@ pipeline {
     jdk 'JDK 17'
     maven 'Maven 3.9'
     nodejs 'NodeJS 20'
-    docker 'docker' 
+    dockerTool 'docker' 
 }
 
     environment {
