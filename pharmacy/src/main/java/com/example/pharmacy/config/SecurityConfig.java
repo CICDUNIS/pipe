@@ -56,6 +56,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/medicamentos/latest").permitAll()
                     .requestMatchers("/api/medicamentos/{id}").permitAll()
                     .requestMatchers("/api/comentarios/medicamento/{idMedicamento}").permitAll()
+                    .requestMatchers("/actuator/prometheus").permitAll()
 
                     .requestMatchers("/api/admin/**").hasRole("ADMINISTRADOR")
 
