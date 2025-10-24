@@ -42,7 +42,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<dependency> <groupId>com.oracle.database.jdbc</groupId> <artifactId>ojdbc8</artifactId><version>21.7.0.0</version> <!-- Ajusta la versión a la que tengas disponible o prefieras --> </dependency>
+		<dependency> <groupId>com.oracle.database.jdbc</groupId> <artifactId>ojdbc8</artifactId><version>21.7.0.0</version>  </dependency>
 		<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-security</artifactId>
@@ -71,6 +71,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
