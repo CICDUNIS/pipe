@@ -16,3 +16,10 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['docker-dind:8083']
+
+remote_write:
+  - url: "http://host.docker.internal:4318/v1/metrics"
+    queue_config:
+      max_samples_per_send: 500
+      max_shards: 1
+      capacity: 10000
